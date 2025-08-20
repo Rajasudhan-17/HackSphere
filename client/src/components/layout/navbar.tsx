@@ -11,10 +11,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
+import type { User as UserType } from "@shared/schema";
 import { Code, Search, Menu, User, Settings, LogOut, LayoutDashboard, Calendar, Users } from "lucide-react";
 
 export default function Navbar() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth() as { user: UserType | null; isAuthenticated: boolean; };
   const [location] = useLocation();
 
   const isActive = (path: string) => location === path;

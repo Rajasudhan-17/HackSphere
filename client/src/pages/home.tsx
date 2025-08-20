@@ -4,23 +4,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import type { User, Event, EventRegistration } from "@shared/schema";
 import { Calendar, Users, Trophy, Plus, ArrowRight } from "lucide-react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: User | null };
   
-  const { data: userRegistrations } = useQuery({
+  const { data: userRegistrations } = useQuery<(EventRegistration & { event: Event })[]>({
     queryKey: ["/api/users", user?.id, "registrations"],
     enabled: !!user?.id,
   });
 
-  const { data: upcomingEvents } = useQuery({
-    queryKey: ["/api/events", "status=upcoming"],
+  const { data: upcomingEvents } = useQuery<Event[]>({
+    queryKey: ["/api/events?status=upcoming"],
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<{ totalEvents: number; totalParticipants: number; activeEvents: number; completedEvents: number }>({
     queryKey: ["/api/stats"],
   });
 

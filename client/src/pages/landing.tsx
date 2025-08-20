@@ -7,14 +7,15 @@ import { Code, Users, Trophy, Search, Calendar, ArrowRight, Star, Award, Target 
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { useQuery } from "@tanstack/react-query";
+import type { Event } from "@shared/schema";
 
 export default function Landing() {
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<{ totalEvents: number; totalParticipants: number; activeEvents: number; completedEvents: number }>({
     queryKey: ["/api/stats"],
     retry: false,
   });
 
-  const { data: featuredEvents } = useQuery({
+  const { data: featuredEvents } = useQuery<Event[]>({
     queryKey: ["/api/events?status=live"],
     retry: false,
   });
