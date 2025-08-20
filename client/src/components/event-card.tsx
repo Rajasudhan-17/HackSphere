@@ -59,7 +59,9 @@ export default function EventCard({ event }: EventCardProps) {
   };
 
   const isRegistrationOpen = () => {
-    return event.status === 'upcoming' || event.status === 'live';
+    const now = new Date();
+    const registrationDeadline = new Date(event.registrationDeadline);
+    return (event.status === 'upcoming' || event.status === 'live') && now <= registrationDeadline;
   };
 
   const timeUntilStart = () => {
