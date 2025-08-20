@@ -1,0 +1,40 @@
+Build me a full-stack web application similar to Unstop for hosting hackathons and listing events. The project must use the Django framework for the backend and PostgreSQL or MySQL as the database (not in-memory or temporary). It should include:
+
+1. **Core Features:**
+   - User authentication (signup, login, logout, profile).
+   - Admin dashboard to create, update, and manage hackathons/events.
+   - Public event listings page with search, filtering, and sorting.
+   - Individual event detail page with description, eligibility, timeline, and registration option.
+   - Participant registration system with ability to join hackathons.
+   - Leaderboard system to display winners after event completion.
+   - Option for organizers to add resources (like PDFs, links).
+   - Responsive frontend (Bootstrap/Tailwind/React optional).
+
+2. **Backend (Django):**
+   - Use Django REST Framework for APIs (if React frontend is used).
+   - Models: User, Event, Registration, Submission, Leaderboard.
+   - Proper database persistence (PostgreSQL/MySQL) with migrations.
+   - Secure authentication (Django auth or JWT if API-based).
+   - Role-based access (Admin, Organizer, Participant).
+
+3. **Frontend:**
+   - Simple, clean UI (Bootstrap or Tailwind).
+   - Pages: Home, Event Listings, Event Details, Dashboard, Profile.
+   - Dynamic event listing and registration functionality.
+
+4. **Deployment Ready:**
+   - Project structured with `requirements.txt` or `Pipfile`.
+   - Settings configured for production (separate `settings.py` for dev/prod).
+   - Include instructions for deployment on platforms like Render, Railway, or VPS.
+   - Static and media file handling configured (e.g., with WhiteNoise or S3).
+   - Use `.env` for secrets and database credentials.
+
+5. **Permanent Storage:**
+   - All user data, events, and registrations should persist in the database.
+   - Do not use temporary storage or AI servers.
+
+6. **Extra (Optional):**
+   - API endpoints for events and user data.
+   - User dashboard showing their registered hackathons.
+   - Organizer dashboard for managing their events.
+   - Search bar + filters for events (e.g., ongoing, upcoming, completed).
