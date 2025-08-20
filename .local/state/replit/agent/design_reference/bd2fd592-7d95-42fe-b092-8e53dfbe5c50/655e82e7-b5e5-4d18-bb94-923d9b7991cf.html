@@ -1,0 +1,561 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackSphere - Premier Hackathon Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'hack-purple': '#8B5CF6',
+                        'hack-indigo': '#6366F1',
+                        'hack-emerald': '#10B981',
+                        'hack-amber': '#F59E0B',
+                        'hack-red': '#EF4444',
+                        'hack-blue': '#3B82F6',
+                        'hack-dark': '#1F2937',
+                        'hack-light': '#F9FAFB',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .organic-border {
+            border-radius: 24px 8px 24px 8px;
+        }
+        .asymmetric-padding {
+            padding: 2rem 1.5rem 3rem 2.5rem;
+        }
+    </style>
+</head>
+<body class="font-inter bg-hack-light">
+    <!-- @COMPONENT: Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-hack-purple to-hack-indigo rounded-lg flex items-center justify-center">
+                            <i class="fas fa-code text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold text-hack-dark">HackSphere</span>
+                    </div>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="text-gray-700 hover:text-hack-purple transition-colors">Events</a>
+                        <a href="#" class="text-gray-700 hover:text-hack-purple transition-colors">Leaderboard</a>
+                        <a href="#" class="text-gray-700 hover:text-hack-purple transition-colors">Resources</a>
+                        <a href="#" class="text-gray-700 hover:text-hack-purple transition-colors">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block">
+                        <input type="text" placeholder="Search events..." 
+                               class="w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-hack-purple focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button class="text-gray-700 hover:text-hack-purple transition-colors" data-event="click:handleLogin">
+                        Sign In
+                    </button>
+                    <button class="bg-hack-purple text-white px-4 py-2 rounded-full hover:bg-purple-600 transition-colors" data-event="click:handleSignup">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- @COMPONENT: Hero Section -->
+    <section class="gradient-bg text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="asymmetric-padding">
+                    <h1 class="text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                        Where Innovation
+                        <span class="block text-hack-amber">Meets Competition</span>
+                    </h1>
+                    <p class="text-xl text-purple-100 mb-8 max-w-lg">
+                        Join the premier platform for hackathons, coding competitions, and tech innovation events. 
+                        Connect with brilliant minds and build the future.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="bg-white text-hack-purple px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors" data-event="click:handleExploreEvents">
+                            Explore Events
+                        </button>
+                        <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-hack-purple transition-colors" data-event="click:handleHostEvent">
+                            Host an Event
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <!-- Team collaboration during hackathon -->
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                         alt="Team collaboration during hackathon" 
+                         class="organic-border w-full h-96 object-cover shadow-2xl">
+                    <div class="absolute -bottom-6 -left-6 bg-hack-emerald text-white p-6 rounded-2xl shadow-xl">
+                        <div class="text-3xl font-bold" data-bind="stats.activeEvents">150+</div>
+                        <div class="text-emerald-100">Active Events</div>
+                    </div>
+                    <div class="absolute -top-6 -right-6 bg-hack-amber text-white p-6 rounded-2xl shadow-xl">
+                        <div class="text-3xl font-bold" data-bind="stats.participants">25K+</div>
+                        <div class="text-yellow-100">Participants</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Hero Section -->
+
+    <!-- @COMPONENT: Featured Events -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-hack-dark mb-4">Featured Hackathons</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Join these trending competitions and showcase your skills to the world
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- @MAP: featuredEvents.map(event => ( -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 card-hover">
+                    <!-- Hackathon coding event - developers working on laptops -->
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=250" 
+                         alt="Hackathon coding event with developers" 
+                         class="w-full h-48 object-cover rounded-t-2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-hack-emerald text-white text-xs px-3 py-1 rounded-full font-medium" data-bind="event.status">LIVE</span>
+                            <span class="text-sm text-gray-500" data-bind="event.timeLeft">2 days left</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-hack-dark mb-2" data-bind="event.title">AI Innovation Challenge 2024</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2" data-bind="event.description">
+                            Build revolutionary AI solutions that solve real-world problems. $50,000 in prizes.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-users text-hack-purple"></i>
+                                <span class="text-sm text-gray-600" data-bind="event.participants">1,247 registered</span>
+                            </div>
+                            <button class="bg-hack-purple text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm font-medium" data-event="click:handleRegister">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 card-hover">
+                    <!-- Tech innovation workspace with multiple screens -->
+                    <img src="https://pixabay.com/get/g203dd7ee93e13a3f6dd7050538fb750d44f2b2b991b281cf18a2370c9779feff6dbde6652ce982fd5601ec38503fcfca77ef417d44668e6a85fd3ed04098521c_1280.jpg" 
+                         alt="Tech innovation workspace setup" 
+                         class="w-full h-48 object-cover rounded-t-2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-hack-amber text-white text-xs px-3 py-1 rounded-full font-medium" data-bind="event.status">UPCOMING</span>
+                            <span class="text-sm text-gray-500" data-bind="event.startDate">Starts Dec 15</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-hack-dark mb-2" data-bind="event.title">Web3 DeFi Hackathon</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2" data-bind="event.description">
+                            Create the next generation of decentralized finance applications with cutting-edge blockchain technology.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-users text-hack-purple"></i>
+                                <span class="text-sm text-gray-600" data-bind="event.participants">892 registered</span>
+                            </div>
+                            <button class="bg-hack-purple text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm font-medium" data-event="click:handleRegister">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 card-hover">
+                    <!-- Coding collaboration session with team members -->
+                    <img src="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=250" 
+                         alt="Coding collaboration session" 
+                         class="w-full h-48 object-cover rounded-t-2xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-gray-400 text-white text-xs px-3 py-1 rounded-full font-medium" data-bind="event.status">COMPLETED</span>
+                            <span class="text-sm text-gray-500" data-bind="event.endDate">Ended Nov 30</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-hack-dark mb-2" data-bind="event.title">Mobile App Challenge</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2" data-bind="event.description">
+                            Design and develop innovative mobile applications that enhance everyday life experiences.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-trophy text-hack-amber"></i>
+                                <span class="text-sm text-gray-600">View Results</span>
+                            </div>
+                            <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                                Event Ended
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+
+            <div class="text-center mt-12">
+                <button class="bg-hack-indigo text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-600 transition-colors" data-event="click:handleViewAllEvents">
+                    View All Events
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Featured Events -->
+
+    <!-- @COMPONENT: Platform Stats -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-hack-dark mb-6">
+                        Empowering Innovation
+                        <span class="block text-hack-purple">Across the Globe</span>
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        HackSphere has become the trusted platform for organizers and participants worldwide, 
+                        fostering creativity and breakthrough innovations.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-hack-purple mb-2" data-bind="stats.totalEvents">500+</div>
+                            <div class="text-gray-600">Events Hosted</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-hack-emerald mb-2" data-bind="stats.totalParticipants">50K+</div>
+                            <div class="text-gray-600">Participants</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-hack-amber mb-2" data-bind="stats.totalPrizes">$2M+</div>
+                            <div class="text-gray-600">Prizes Awarded</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="text-3xl font-bold text-hack-red mb-2" data-bind="stats.totalCountries">45+</div>
+                            <div class="text-gray-600">Countries</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <!-- Tech innovation theme - modern workspace with innovation tools -->
+                    <img src="https://images.unsplash.com/photo-1553028826-f4804a6dba3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=500" 
+                         alt="Modern innovation workspace" 
+                         class="w-full h-96 object-cover rounded-3xl shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Platform Stats -->
+
+    <!-- @COMPONENT: How It Works -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-hack-dark mb-4">How HackSphere Works</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Getting started is simple. Follow these steps to join or host your next hackathon.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-hack-purple rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-user-plus text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-hack-dark mb-4">1. Create Account</h3>
+                    <p class="text-gray-600">
+                        Sign up with your email or social accounts. Choose your role as participant or organizer.
+                    </p>
+                </div>
+
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-hack-emerald rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-search text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-hack-dark mb-4">2. Discover Events</h3>
+                    <p class="text-gray-600">
+                        Browse through hundreds of hackathons, filter by technology, difficulty, and prizes.
+                    </p>
+                </div>
+
+                <div class="text-center group">
+                    <div class="w-20 h-20 bg-hack-amber rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-trophy text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-hack-dark mb-4">3. Compete & Win</h3>
+                    <p class="text-gray-600">
+                        Join teams, build amazing projects, and compete for prizes and recognition.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: How It Works -->
+
+    <!-- @COMPONENT: Success Stories -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-hack-dark mb-4">Success Stories</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    See how HackSphere has launched careers and breakthrough innovations
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <!-- Team collaboration and innovation session -->
+                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400" 
+                         alt="Successful team collaboration" 
+                         class="w-full h-80 object-cover rounded-2xl shadow-xl">
+                </div>
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" 
+                                 alt="Success story participant" 
+                                 class="w-12 h-12 rounded-full object-cover mr-4">
+                            <div>
+                                <div class="font-semibold text-hack-dark" data-bind="testimonial.name">Alex Chen</div>
+                                <div class="text-gray-600 text-sm" data-bind="testimonial.role">Software Engineer at Google</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700" data-bind="testimonial.quote">
+                            "Winning the AI Challenge on HackSphere opened doors I never imagined. The project I built 
+                            during the hackathon directly led to my dream job at Google."
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <img src="https://pixabay.com/get/g653992a90031fa65f2a202cae4951cca3744d87a8c7af8b6576bfcf15a3f6046b57b6247136ada1af7b28c18a05838ba2295b14df258ac4f9c316ca0dbbbd9d3_1280.jpg" 
+                                 alt="Success story participant" 
+                                 class="w-12 h-12 rounded-full object-cover mr-4">
+                            <div>
+                                <div class="font-semibold text-hack-dark" data-bind="testimonial.name">Sarah Martinez</div>
+                                <div class="text-gray-600 text-sm" data-bind="testimonial.role">Startup Founder</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700" data-bind="testimonial.quote">
+                            "Our healthcare app prototype from the Medical Innovation Hackathon is now a funded startup 
+                            helping thousands of patients worldwide."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Success Stories -->
+
+    <!-- @COMPONENT: Call to Action -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+                Ready to Build the Future?
+            </h2>
+            <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of innovators on HackSphere. Whether you're here to compete or organize, 
+                your next breakthrough is just one event away.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-white text-hack-purple px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors text-lg" data-event="click:handleSignupParticipant">
+                    Join as Participant
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-hack-purple transition-colors text-lg" data-event="click:handleSignupOrganizer">
+                    Become an Organizer
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Call to Action -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-hack-dark text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-8 h-8 bg-gradient-to-r from-hack-purple to-hack-indigo rounded-lg flex items-center justify-center">
+                            <i class="fas fa-code text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold">HackSphere</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 max-w-md">
+                        The premier platform for hackathons and coding competitions. 
+                        Connecting innovators worldwide to build the future together.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-discord text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Platform</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white transition-colors">Browse Events</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Host Event</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Leaderboard</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Resources</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API Docs</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 HackSphere. All rights reserved.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        // TODO: Implement business logic, API calls, or state management
+        (function() {
+            // Basic interactive functionality for demo purposes
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('[data-mobile-menu]');
+            const mobileMenu = document.querySelector('[data-mobile-menu-content]');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Search functionality placeholder
+            const searchInput = document.querySelector('input[type="text"]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    console.log('Search query:', e.target.value);
+                    // TODO: Implement search API call
+                });
+            }
+
+            // Event registration handlers
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                
+                if (target.dataset.event) {
+                    e.preventDefault();
+                    const [event, handler] = target.dataset.event.split(':');
+                    
+                    switch(handler) {
+                        case 'handleLogin':
+                            console.log('Login clicked');
+                            // TODO: Implement login modal/redirect
+                            break;
+                        case 'handleSignup':
+                        case 'handleSignupParticipant':
+                        case 'handleSignupOrganizer':
+                            console.log('Signup clicked:', handler);
+                            // TODO: Implement signup flow
+                            break;
+                        case 'handleRegister':
+                            console.log('Event registration clicked');
+                            // TODO: Implement event registration
+                            break;
+                        case 'handleExploreEvents':
+                        case 'handleViewAllEvents':
+                            console.log('Navigate to events page');
+                            // TODO: Implement navigation
+                            break;
+                        case 'handleHostEvent':
+                            console.log('Host event clicked');
+                            // TODO: Implement host event flow
+                            break;
+                        default:
+                            console.log('Unknown handler:', handler);
+                    }
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Animation on scroll (basic intersection observer)
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Apply animation to cards and sections
+            document.querySelectorAll('.card-hover, section > div').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        })();
+    </script>
+</body>
+</html>

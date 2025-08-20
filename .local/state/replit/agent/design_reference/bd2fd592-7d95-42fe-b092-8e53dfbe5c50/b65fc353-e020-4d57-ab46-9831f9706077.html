@@ -1,0 +1,986 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackHub - Platform for Hackathons & Tech Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-slate-50 font-sans">
+    <!-- @COMPONENT: NavigationHeader [user authentication state, role-based menu] -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-primary-600">HackHub</h1>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="#" class="text-slate-900 hover:text-primary-600 px-3 py-2 text-sm font-medium">Events</a>
+                            <a href="#" class="text-slate-500 hover:text-slate-900 px-3 py-2 text-sm font-medium">Hackathons</a>
+                            <a href="#" class="text-slate-500 hover:text-slate-900 px-3 py-2 text-sm font-medium">Leaderboard</a>
+                            <a href="#" class="text-slate-500 hover:text-slate-900 px-3 py-2 text-sm font-medium">Resources</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block">
+                        <input type="search" placeholder="Search events..." 
+                               class="w-64 pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                               data-implementation="Implement search functionality with debouncing">
+                        <i data-feather="search" class="absolute left-3 top-2.5 h-4 w-4 text-slate-400"></i>
+                    </div>
+                    
+                    <!-- @STATE: isAuthenticated:boolean = true -->
+                    <div class="relative" data-implementation="Toggle between authenticated and guest states">
+                        <button class="flex items-center space-x-2 text-sm font-medium text-slate-700 hover:text-slate-900" 
+                                data-event="click:toggleUserMenu">
+                            <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=32&h=32" alt="User avatar" data-bind="user.avatar">
+                            <span data-bind="user.name">John Doe</span>
+                            <i data-feather="chevron-down" class="h-4 w-4"></i>
+                        </button>
+                        <!-- Dropdown menu would be implemented here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <!-- @COMPONENT: HeroSection [featured events, call-to-action] -->
+    <section class="bg-gradient-to-br from-primary-500 to-violet-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl lg:text-6xl font-bold mb-6">Discover. Compete. Innovate.</h1>
+                    <p class="text-xl text-blue-100 mb-8">Join thousands of developers in exciting hackathons and tech events. Build amazing projects, learn new skills, and win awesome prizes.</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                                data-event="click:navigateToEvents">Explore Events</button>
+                        <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors"
+                                data-event="click:navigateToCreateEvent">Host Event</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <!-- A diverse team of developers collaborating on laptops in a modern workspace -->
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                         alt="Team collaboration" class="rounded-xl shadow-2xl">
+                    <div class="absolute -bottom-6 -left-6 bg-white rounded-lg p-4 shadow-lg">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <span class="text-slate-700 font-medium">500+ Live Events</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: HeroSection -->
+
+    <!-- @COMPONENT: FeaturedEvents [trending hackathons] -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Featured Hackathons</h2>
+                <p class="text-lg text-slate-600">Join these trending events and showcase your skills</p>
+            </div>
+            
+            <!-- @MAP: featuredEvents.map(event => ( -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Event Card 1 -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-slate-200 overflow-hidden">
+                    <!-- A vibrant hackathon event with developers coding intensively -->
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                         alt="AI Innovation Challenge" class="w-full h-48 object-cover" data-bind="event.image">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-0.5 rounded-full" data-bind="event.status">LIVE</span>
+                            <span class="text-slate-500 text-sm" data-bind="event.timeRemaining">2 days left</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2" data-bind="event.title">AI Innovation Challenge</h3>
+                        <p class="text-slate-600 text-sm mb-4" data-bind="event.description">Build the next generation of AI applications that solve real-world problems...</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="users" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm text-slate-600" data-bind="event.participants">1,247 participants</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="award" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm font-medium text-slate-900" data-bind="event.prize">$50K Prize</span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                                data-event="click:registerForEvent" data-event-id="1">Register Now</button>
+                    </div>
+                </div>
+
+                <!-- Event Card 2 -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-slate-200 overflow-hidden">
+                    <!-- Modern tech startup office with innovative workspace setup -->
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                         alt="Web3 Buildathon" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">UPCOMING</span>
+                            <span class="text-slate-500 text-sm">Starts in 5 days</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">Web3 Buildathon</h3>
+                        <p class="text-slate-600 text-sm mb-4">Create decentralized applications that revolutionize finance and digital ownership...</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="users" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm text-slate-600">856 participants</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="award" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm font-medium text-slate-900">$30K Prize</span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors font-medium">Register Now</button>
+                    </div>
+                </div>
+
+                <!-- Event Card 3 -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-slate-200 overflow-hidden">
+                    <!-- Futuristic technology and IoT devices in a smart environment -->
+                    <img src="https://pixabay.com/get/g015fb014b2e98a50d73ea8f43a985451ceec31b4556348af32bf94d285a2b0c1fa6de519a00dfa1578b695b2d35af277585feac448e8040b312bbd2fbc8c24a9_1280.jpg" 
+                         alt="IoT Hackathon" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-violet-100 text-violet-800 text-xs font-medium px-2.5 py-0.5 rounded-full">UPCOMING</span>
+                            <span class="text-slate-500 text-sm">Starts in 12 days</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900 mb-2">IoT Innovation Hub</h3>
+                        <p class="text-slate-600 text-sm mb-4">Design smart solutions for connected devices that improve everyday life...</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="users" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm text-slate-600">432 participants</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i data-feather="award" class="h-4 w-4 text-slate-400"></i>
+                                <span class="text-sm font-medium text-slate-900">$25K Prize</span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors font-medium">Register Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_MAP -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: FeaturedEvents -->
+
+    <!-- @COMPONENT: EventListingPage [search, filters, pagination] -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Filters Sidebar -->
+                <div class="lg:w-64 flex-shrink-0">
+                    <div class="bg-slate-50 rounded-xl p-6">
+                        <h3 class="font-semibold text-slate-900 mb-4">Filter Events</h3>
+                        
+                        <!-- Status Filter -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked>
+                                    <span class="ml-2 text-sm text-slate-600">Live</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked>
+                                    <span class="ml-2 text-sm text-slate-600">Upcoming</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500">
+                                    <span class="ml-2 text-sm text-slate-600">Completed</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Category</label>
+                            <select class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option>All Categories</option>
+                                <option>AI/ML</option>
+                                <option>Web Development</option>
+                                <option>Mobile Apps</option>
+                                <option>Blockchain</option>
+                                <option>IoT</option>
+                            </select>
+                        </div>
+
+                        <!-- Prize Range -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Prize Range</label>
+                            <select class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option>Any Prize</option>
+                                <option>$0 - $10K</option>
+                                <option>$10K - $50K</option>
+                                <option>$50K+</option>
+                            </select>
+                        </div>
+
+                        <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+                                data-event="click:applyFilters">Apply Filters</button>
+                    </div>
+                </div>
+
+                <!-- Event Grid -->
+                <div class="flex-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-slate-900">All Events</h2>
+                        <div class="flex items-center space-x-4">
+                            <select class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option>Sort by Latest</option>
+                                <option>Sort by Prize</option>
+                                <option>Sort by Popularity</option>
+                                <option>Sort by Deadline</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- @MAP: allEvents.map(event => ( -->
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <!-- Event Card -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-0.5 rounded-full">LIVE</span>
+                                        <span class="text-slate-500 text-xs">Ends in 3 days</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-1">Climate Tech Challenge</h3>
+                                    <p class="text-slate-600 text-sm">Build sustainable solutions for environmental challenges...</p>
+                                </div>
+                                <!-- Tech innovation concept with clean energy and sustainability themes -->
+                                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80" 
+                                     alt="Climate Tech Challenge" class="w-16 h-16 rounded-lg object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 text-sm text-slate-600">
+                                    <span class="flex items-center space-x-1">
+                                        <i data-feather="users" class="h-4 w-4"></i>
+                                        <span>892</span>
+                                    </span>
+                                    <span class="flex items-center space-x-1">
+                                        <i data-feather="award" class="h-4 w-4"></i>
+                                        <span>$40K</span>
+                                    </span>
+                                </div>
+                                <button class="text-primary-600 hover:text-primary-700 font-medium text-sm">View Details →</button>
+                            </div>
+                        </div>
+
+                        <!-- More event cards... -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">UPCOMING</span>
+                                        <span class="text-slate-500 text-xs">Starts in 7 days</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-1">FinTech Innovation</h3>
+                                    <p class="text-slate-600 text-sm">Revolutionize financial services with cutting-edge technology...</p>
+                                </div>
+                                <!-- Modern financial technology and digital banking visualization -->
+                                <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80" 
+                                     alt="FinTech Innovation" class="w-16 h-16 rounded-lg object-cover">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 text-sm text-slate-600">
+                                    <span class="flex items-center space-x-1">
+                                        <i data-feather="users" class="h-4 w-4"></i>
+                                        <span>654</span>
+                                    </span>
+                                    <span class="flex items-center space-x-1">
+                                        <i data-feather="award" class="h-4 w-4"></i>
+                                        <span>$35K</span>
+                                    </span>
+                                </div>
+                                <button class="text-primary-600 hover:text-primary-700 font-medium text-sm">View Details →</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP -->
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center">
+                        <nav class="flex items-center space-x-2">
+                            <button class="px-3 py-2 rounded-lg border border-slate-300 text-slate-500 hover:bg-slate-50">Previous</button>
+                            <button class="px-3 py-2 rounded-lg bg-primary-600 text-white">1</button>
+                            <button class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">2</button>
+                            <button class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">3</button>
+                            <span class="px-3 py-2 text-slate-500">...</span>
+                            <button class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">12</button>
+                            <button class="px-3 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">Next</button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: EventListingPage -->
+
+    <!-- @COMPONENT: EventDetailPage [full event information, registration] -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <!-- Event Header -->
+                <div class="relative">
+                    <!-- Large hackathon venue with participants working on innovative projects -->
+                    <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400" 
+                         alt="AI Innovation Challenge Event" class="w-full h-64 object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <span class="bg-emerald-500 text-white text-xs font-medium px-2.5 py-0.5 rounded-full mb-2 inline-block">LIVE EVENT</span>
+                        <h1 class="text-3xl font-bold mb-2">AI Innovation Challenge 2024</h1>
+                        <p class="text-blue-100">Organized by TechCorp • 2 days remaining</p>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="grid lg:grid-cols-3 gap-8">
+                        <!-- Main Content -->
+                        <div class="lg:col-span-2">
+                            <div class="mb-8">
+                                <h2 class="text-2xl font-bold text-slate-900 mb-4">About This Challenge</h2>
+                                <p class="text-slate-700 leading-relaxed mb-4">
+                                    Join the most exciting AI hackathon of 2024! We're looking for innovative solutions that leverage artificial intelligence to solve real-world problems. Whether you're working on machine learning, natural language processing, computer vision, or any other AI domain, this is your chance to showcase your skills.
+                                </p>
+                                <p class="text-slate-700 leading-relaxed">
+                                    Teams will have 48 hours to build and present their solutions to a panel of industry experts. The winning projects will receive mentorship opportunities, potential funding, and amazing prizes.
+                                </p>
+                            </div>
+
+                            <!-- Timeline -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-slate-900 mb-4">Event Timeline</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-3 h-3 bg-emerald-500 rounded-full mt-2"></div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Registration Deadline</p>
+                                            <p class="text-slate-600 text-sm">December 15, 2024 11:59 PM</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Event Kickoff</p>
+                                            <p class="text-slate-600 text-sm">December 20, 2024 9:00 AM</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-3 h-3 bg-violet-500 rounded-full mt-2"></div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Submission Deadline</p>
+                                            <p class="text-slate-600 text-sm">December 22, 2024 6:00 PM</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full mt-2"></div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Winners Announcement</p>
+                                            <p class="text-slate-600 text-sm">December 22, 2024 8:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Resources -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-slate-900 mb-4">Resources & Downloads</h3>
+                                <div class="space-y-3">
+                                    <a href="#" class="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                                        <i data-feather="file-text" class="h-5 w-5 text-slate-400"></i>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Event Guidelines & Rules</p>
+                                            <p class="text-slate-600 text-sm">Complete guide for participants</p>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                                        <i data-feather="code" class="h-5 w-5 text-slate-400"></i>
+                                        <div>
+                                            <p class="font-medium text-slate-900">API Documentation</p>
+                                            <p class="text-slate-600 text-sm">Technical resources and APIs</p>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                                        <i data-feather="video" class="h-5 w-5 text-slate-400"></i>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Tutorial Videos</p>
+                                            <p class="text-slate-600 text-sm">Getting started guides</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="lg:col-span-1">
+                            <!-- Registration Card -->
+                            <div class="bg-slate-50 rounded-xl p-6 mb-6">
+                                <div class="text-center mb-6">
+                                    <div class="text-3xl font-bold text-slate-900 mb-1">$50,000</div>
+                                    <div class="text-slate-600">Total Prize Pool</div>
+                                </div>
+                                
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Participants</span>
+                                        <span class="font-medium text-slate-900">1,247</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Teams</span>
+                                        <span class="font-medium text-slate-900">312</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Duration</span>
+                                        <span class="font-medium text-slate-900">48 Hours</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Mode</span>
+                                        <span class="font-medium text-slate-900">Hybrid</span>
+                                    </div>
+                                </div>
+
+                                <button class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold mb-4"
+                                        data-event="click:registerForEvent">Register for Event</button>
+                                
+                                <div class="text-center">
+                                    <button class="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                                            data-event="click:shareEvent">Share Event</button>
+                                </div>
+                            </div>
+
+                            <!-- Organizer Info -->
+                            <div class="bg-white border border-slate-200 rounded-xl p-6">
+                                <h3 class="font-semibold text-slate-900 mb-4">Organized by</h3>
+                                <div class="flex items-center space-x-3 mb-4">
+                                    <!-- Professional company logo or tech organization branding -->
+                                    <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" 
+                                         alt="TechCorp Logo" class="w-12 h-12 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-slate-900">TechCorp Innovation</p>
+                                        <p class="text-slate-600 text-sm">Verified Organizer</p>
+                                    </div>
+                                </div>
+                                <p class="text-slate-600 text-sm mb-4">Leading technology company focused on AI research and development with 50+ successful events.</p>
+                                <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">View Profile →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: EventDetailPage -->
+
+    <!-- @COMPONENT: UserDashboard [registered events, profile management] -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex gap-8">
+                <!-- Sidebar Navigation -->
+                <div class="w-64 flex-shrink-0">
+                    <div class="bg-slate-50 rounded-xl p-6">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=48&h=48" alt="User avatar">
+                            <div>
+                                <p class="font-medium text-slate-900" data-bind="user.name">John Doe</p>
+                                <p class="text-slate-600 text-sm" data-bind="user.role">Participant</p>
+                            </div>
+                        </div>
+                        <nav class="space-y-2">
+                            <a href="#" class="flex items-center space-x-2 px-3 py-2 bg-primary-100 text-primary-700 rounded-lg font-medium">
+                                <i data-feather="calendar" class="h-4 w-4"></i>
+                                <span>My Events</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                                <i data-feather="award" class="h-4 w-4"></i>
+                                <span>Achievements</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                                <i data-feather="user" class="h-4 w-4"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                                <i data-feather="settings" class="h-4 w-4"></i>
+                                <span>Settings</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-slate-900 mb-2">My Events</h1>
+                        <p class="text-slate-600">Track your registered hackathons and competitions</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i data-feather="calendar" class="h-5 w-5 text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="stats.totalEvents">12</p>
+                                    <p class="text-slate-600 text-sm">Total Events</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                    <i data-feather="play-circle" class="h-5 w-5 text-emerald-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="stats.activeEvents">3</p>
+                                    <p class="text-slate-600 text-sm">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+                                    <i data-feather="check-circle" class="h-5 w-5 text-violet-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="stats.completedEvents">8</p>
+                                    <p class="text-slate-600 text-sm">Completed</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <i data-feather="award" class="h-5 w-5 text-yellow-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-slate-900" data-bind="stats.awards">2</p>
+                                    <p class="text-slate-600 text-sm">Awards</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Tabs -->
+                    <div class="mb-6">
+                        <nav class="flex space-x-8 border-b border-slate-200">
+                            <button class="py-2 px-1 border-b-2 border-primary-500 text-primary-600 font-medium text-sm">Active Events</button>
+                            <button class="py-2 px-1 text-slate-500 hover:text-slate-700 font-medium text-sm">Upcoming</button>
+                            <button class="py-2 px-1 text-slate-500 hover:text-slate-700 font-medium text-sm">Completed</button>
+                        </nav>
+                    </div>
+
+                    <!-- Event List -->
+                    <!-- @MAP: userEvents.map(event => ( -->
+                    <div class="space-y-4">
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <span class="bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-0.5 rounded-full">LIVE</span>
+                                        <span class="text-slate-500 text-sm">2 days remaining</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-2">AI Innovation Challenge</h3>
+                                    <p class="text-slate-600 text-sm mb-4">Your team "CodeCrafters" is currently ranked #47 out of 312 teams</p>
+                                    <div class="flex items-center space-x-4">
+                                        <button class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+                                                data-event="click:viewSubmission">View Submission</button>
+                                        <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">Event Details</button>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-slate-500">Prize Pool</p>
+                                    <p class="text-xl font-bold text-slate-900">$50K</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 rounded-xl p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">UPCOMING</span>
+                                        <span class="text-slate-500 text-sm">Starts in 5 days</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Web3 Buildathon</h3>
+                                    <p class="text-slate-600 text-sm mb-4">Registration confirmed. Team formation opens tomorrow.</p>
+                                    <div class="flex items-center space-x-4">
+                                        <button class="border border-primary-600 text-primary-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-50 transition-colors">Find Team</button>
+                                        <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">Event Details</button>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-slate-500">Prize Pool</p>
+                                    <p class="text-xl font-bold text-slate-900">$30K</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: UserDashboard -->
+
+    <!-- @COMPONENT: AdminDashboard [event management, user management] -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
+                <p class="text-slate-600">Manage events, users, and platform settings</p>
+            </div>
+
+            <!-- Admin Stats -->
+            <div class="grid md:grid-cols-5 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i data-feather="calendar" class="h-5 w-5 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">47</p>
+                            <p class="text-slate-600 text-sm">Total Events</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i data-feather="users" class="h-5 w-5 text-emerald-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">12.5K</p>
+                            <p class="text-slate-600 text-sm">Users</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+                            <i data-feather="user-check" class="h-5 w-5 text-violet-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">8.2K</p>
+                            <p class="text-slate-600 text-sm">Registrations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i data-feather="trending-up" class="h-5 w-5 text-yellow-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">+23%</p>
+                            <p class="text-slate-600 text-sm">Growth</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i data-feather="alert-circle" class="h-5 w-5 text-red-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-900">3</p>
+                            <p class="text-slate-600 text-sm">Pending</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Recent Events -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b border-slate-200">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-xl font-semibold text-slate-900">Recent Events</h2>
+                                <button class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+                                        data-event="click:createNewEvent">Create Event</button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <!-- @MAP: adminEvents.map(event => ( -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                            <i data-feather="play-circle" class="h-5 w-5 text-emerald-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">AI Innovation Challenge</p>
+                                            <p class="text-slate-600 text-sm">1,247 participants • 2 days left</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-slate-400 hover:text-slate-600">
+                                            <i data-feather="edit-3" class="h-4 w-4"></i>
+                                        </button>
+                                        <button class="text-slate-400 hover:text-slate-600">
+                                            <i data-feather="bar-chart-2" class="h-4 w-4"></i>
+                                        </button>
+                                        <button class="text-slate-400 hover:text-red-600">
+                                            <i data-feather="trash-2" class="h-4 w-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-4 border border-slate-200 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <i data-feather="clock" class="h-5 w-5 text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900">Web3 Buildathon</p>
+                                            <p class="text-slate-600 text-sm">856 participants • Starts in 5 days</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-slate-400 hover:text-slate-600">
+                                            <i data-feather="edit-3" class="h-4 w-4"></i>
+                                        </button>
+                                        <button class="text-slate-400 hover:text-slate-600">
+                                            <i data-feather="bar-chart-2" class="h-4 w-4"></i>
+                                        </button>
+                                        <button class="text-slate-400 hover:text-red-600">
+                                            <i data-feather="trash-2" class="h-4 w-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @END_MAP -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="space-y-6">
+                    <!-- Pending Approvals -->
+                    <div class="bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b border-slate-200">
+                            <h3 class="text-lg font-semibold text-slate-900">Pending Approvals</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-slate-900 text-sm">New Event Submission</p>
+                                        <p class="text-slate-600 text-xs">FinTech Innovation</p>
+                                    </div>
+                                    <button class="text-primary-600 hover:text-primary-700 text-xs font-medium">Review</button>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-slate-900 text-sm">Organizer Application</p>
+                                        <p class="text-slate-600 text-xs">TechStart Inc.</p>
+                                    </div>
+                                    <button class="text-primary-600 hover:text-primary-700 text-xs font-medium">Review</button>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-slate-900 text-sm">Content Report</p>
+                                        <p class="text-slate-600 text-xs">Event description</p>
+                                    </div>
+                                    <button class="text-primary-600 hover:text-primary-700 text-xs font-medium">Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b border-slate-200">
+                            <h3 class="text-lg font-semibold text-slate-900">Platform Health</h3>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-600">Server Status</span>
+                                <span class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                    <span class="text-emerald-600 text-sm font-medium">Healthy</span>
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-600">Database</span>
+                                <span class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                    <span class="text-emerald-600 text-sm font-medium">Healthy</span>
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-600">API Response</span>
+                                <span class="text-slate-900 text-sm font-medium">156ms</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-600">Active Users</span>
+                                <span class="text-slate-900 text-sm font-medium">2,847</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: AdminDashboard -->
+
+    <!-- @COMPONENT: Footer [links, contact information] -->
+    <footer class="bg-slate-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">HackHub</h3>
+                    <p class="text-slate-300 mb-4">The premier platform for hackathons, coding competitions, and tech innovation events.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-white">
+                            <i data-feather="twitter" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white">
+                            <i data-feather="github" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white">
+                            <i data-feather="linkedin" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><a href="#" class="hover:text-white">Browse Events</a></li>
+                        <li><a href="#" class="hover:text-white">Host Event</a></li>
+                        <li><a href="#" class="hover:text-white">Leaderboard</a></li>
+                        <li><a href="#" class="hover:text-white">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><a href="#" class="hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white">Community</a></li>
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white">API Docs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-slate-300">
+                        <li><a href="#" class="hover:text-white">About</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-slate-400">
+                <p>&copy; 2024 HackHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        (function() {
+            // Initialize Feather Icons
+            feather.replace();
+
+            // Demo interactivity - replace with actual implementation
+            function initializeInteractivity() {
+                // Search functionality
+                const searchInput = document.querySelector('input[type="search"]');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function(e) {
+                        // TODO: Implement search with debouncing and API calls
+                        console.log('Search query:', e.target.value);
+                    });
+                }
+
+                // Filter functionality
+                const filterCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+                filterCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        // TODO: Implement filter logic
+                        console.log('Filter changed:', this.checked);
+                    });
+                });
+
+                // Button click handlers
+                document.addEventListener('click', function(e) {
+                    const button = e.target.closest('button[data-event]');
+                    if (button) {
+                        const eventType = button.getAttribute('data-event');
+                        // TODO: Implement specific button actions
+                        console.log('Button clicked:', eventType);
+                        
+                        // Prevent default for demo
+                        e.preventDefault();
+                    }
+                });
+
+                // Form submissions
+                const forms = document.querySelectorAll('form');
+                forms.forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // TODO: Implement form validation and submission
+                        console.log('Form submitted');
+                    });
+                });
+
+                // Tab switching
+                const tabButtons = document.querySelectorAll('nav button');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // TODO: Implement tab content switching
+                        tabButtons.forEach(btn => btn.classList.remove('border-primary-500', 'text-primary-600'));
+                        tabButtons.forEach(btn => btn.classList.add('text-slate-500'));
+                        
+                        this.classList.add('border-primary-500', 'text-primary-600');
+                        this.classList.remove('text-slate-500');
+                    });
+                });
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeInteractivity);
+            } else {
+                initializeInteractivity();
+            }
+        })();
+    </script>
+</body>
+</html>
