@@ -164,10 +164,19 @@ export default function OrganizerDashboard() {
   });
 
   const onSubmitEvent = (data: InsertEventData) => {
-    createEventMutation.mutate({
+    // Clean up data and handle null values
+    const cleanData = {
       ...data,
       organizerId: user?.id || "",
-    });
+      shortDescription: data.shortDescription || "",
+      prizePool: data.prizePool || "",
+      requirements: data.requirements || "",
+      rules: data.rules || "",
+      judgesCriteria: data.judgesCriteria || "",
+      resources: [],
+      tags: [],
+    };
+    createEventMutation.mutate(cleanData);
   };
 
   const getStatusColor = (status: string) => {
@@ -670,7 +679,7 @@ export default function OrganizerDashboard() {
                                       type="number" 
                                       placeholder="4" 
                                       {...field} 
-                                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                      onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                                       data-testid="input-max-team-size"
                                     />
                                   </FormControl>
