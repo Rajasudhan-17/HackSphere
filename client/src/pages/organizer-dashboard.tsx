@@ -164,7 +164,7 @@ export default function OrganizerDashboard() {
   });
 
   const onSubmitEvent = (data: InsertEventData) => {
-    // Clean up data and handle null values
+    // Clean up data and handle null values, ensure dates are Date objects
     const cleanData = {
       ...data,
       organizerId: user?.id || "",
@@ -175,6 +175,10 @@ export default function OrganizerDashboard() {
       judgesCriteria: data.judgesCriteria || "",
       resources: [],
       tags: [],
+      // Ensure dates are proper Date objects
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
+      registrationDeadline: new Date(data.registrationDeadline),
     };
     createEventMutation.mutate(cleanData);
   };
