@@ -14,8 +14,8 @@ import SearchFilters from "@/components/search-filters";
 
 export default function Events() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("createdAt");
 
   const { data: events, isLoading } = useQuery({
@@ -23,8 +23,8 @@ export default function Events() {
     queryFn: async () => {
       const params = new URLSearchParams();
       if (searchTerm) params.append("search", searchTerm);
-      if (statusFilter) params.append("status", statusFilter);
-      if (categoryFilter) params.append("category", categoryFilter);
+      if (statusFilter && statusFilter !== "all") params.append("status", statusFilter);
+      if (categoryFilter && categoryFilter !== "all") params.append("category", categoryFilter);
       
       const response = await fetch(`/api/events?${params.toString()}`);
       if (!response.ok) throw new Error("Failed to fetch events");
@@ -108,7 +108,7 @@ export default function Events() {
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="upcoming">Upcoming</SelectItem>
                 <SelectItem value="live">Live</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
@@ -121,7 +121,7 @@ export default function Events() {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map(category => (
                   <SelectItem key={category} value={category}>{category}</SelectItem>
                 ))}

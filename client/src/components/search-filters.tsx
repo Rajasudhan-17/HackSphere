@@ -58,9 +58,9 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
   const clearFilters = () => {
     onFiltersChange({
       search: "",
-      status: "",
-      category: "",
-      difficulty: "",
+      status: "all",
+      category: "all",
+      difficulty: "all",
       startDate: undefined,
       endDate: undefined,
     });
@@ -69,9 +69,9 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
   const getActiveFilterCount = () => {
     let count = 0;
     if (currentFilters.search) count++;
-    if (currentFilters.status) count++;
-    if (currentFilters.category) count++;
-    if (currentFilters.difficulty) count++;
+    if (currentFilters.status && currentFilters.status !== "all") count++;
+    if (currentFilters.category && currentFilters.category !== "all") count++;
+    if (currentFilters.difficulty && currentFilters.difficulty !== "all") count++;
     if (currentFilters.startDate) count++;
     if (currentFilters.endDate) count++;
     return count;
@@ -134,7 +134,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
           <Button
             variant={currentFilters.status === "live" ? "default" : "outline"}
             size="sm"
-            onClick={() => updateFilter("status", currentFilters.status === "live" ? "" : "live")}
+            onClick={() => updateFilter("status", currentFilters.status === "live" ? "all" : "live"))
             className={currentFilters.status === "live" ? "bg-hack-emerald hover:bg-emerald-600" : ""}
             data-testid="button-quick-filter-live"
           >
@@ -143,7 +143,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
           <Button
             variant={currentFilters.status === "upcoming" ? "default" : "outline"}
             size="sm"
-            onClick={() => updateFilter("status", currentFilters.status === "upcoming" ? "" : "upcoming")}
+            onClick={() => updateFilter("status", currentFilters.status === "upcoming" ? "all" : "upcoming"))
             className={currentFilters.status === "upcoming" ? "bg-hack-amber hover:bg-amber-600" : ""}
             data-testid="button-quick-filter-upcoming"
           >
@@ -152,7 +152,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
           <Button
             variant={currentFilters.category === "AI/ML" ? "default" : "outline"}
             size="sm"
-            onClick={() => updateFilter("category", currentFilters.category === "AI/ML" ? "" : "AI/ML")}
+            onClick={() => updateFilter("category", currentFilters.category === "AI/ML" ? "all" : "AI/ML"))
             className={currentFilters.category === "AI/ML" ? "bg-hack-purple hover:bg-purple-600" : ""}
             data-testid="button-quick-filter-ai"
           >
@@ -161,7 +161,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
           <Button
             variant={currentFilters.category === "Blockchain" ? "default" : "outline"}
             size="sm"
-            onClick={() => updateFilter("category", currentFilters.category === "Blockchain" ? "" : "Blockchain")}
+            onClick={() => updateFilter("category", currentFilters.category === "Blockchain" ? "all" : "Blockchain"))
             className={currentFilters.category === "Blockchain" ? "bg-hack-indigo hover:bg-indigo-600" : ""}
             data-testid="button-quick-filter-blockchain"
           >
@@ -181,7 +181,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
                     <SelectValue placeholder="All Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Status</SelectItem>
+                    <SelectItem value="all">All Status</SelectItem>
                     {statuses.map(status => (
                       <SelectItem key={status} value={status}>
                         {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -199,7 +199,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Categories</SelectItem>
+                    <SelectItem value="all">All Categories</SelectItem>
                     {categories.map(category => (
                       <SelectItem key={category} value={category}>{category}</SelectItem>
                     ))}
@@ -215,7 +215,7 @@ export default function SearchFilters({ onFiltersChange, currentFilters }: Searc
                     <SelectValue placeholder="All Levels" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Levels</SelectItem>
+                    <SelectItem value="all">All Levels</SelectItem>
                     {difficulties.map(difficulty => (
                       <SelectItem key={difficulty} value={difficulty}>
                         {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
