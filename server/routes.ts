@@ -12,6 +12,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', async (req: any, res) => {
     try {
+      if (process.env.DISABLE_AUTH === 'true') {
+        return res.json(null);
+      }
       if (!req.isAuthenticated() || !req.user?.claims?.sub) {
         return res.status(401).json({ message: "Unauthorized" });
       }
