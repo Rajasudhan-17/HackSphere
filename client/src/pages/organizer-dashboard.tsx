@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
-import { insertEventSchema, type InsertEventData } from "@shared/schema";
+import { insertEventSchema, type InsertEventData, type User } from "@shared/schema";
 import { format } from "date-fns";
 import { 
   Calendar as CalendarIcon, 
@@ -46,7 +46,7 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
 export default function OrganizerDashboard() {
-  const { user } = useAuth();
+  const { user } = useAuth() as { user: User | null; isLoading: boolean; isAuthenticated: boolean; };
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
@@ -92,14 +92,14 @@ export default function OrganizerDashboard() {
       title: "",
       description: "",
       shortDescription: "",
-      status: "draft",
+      status: "draft" as const,
       startDate: new Date(),
       endDate: new Date(),
       registrationDeadline: new Date(),
       maxParticipants: undefined,
       prizePool: "",
       category: "",
-      difficulty: "intermediate",
+      difficulty: "intermediate" as const,
       requirements: "",
       rules: "",
       judgesCriteria: "",
@@ -371,7 +371,7 @@ export default function OrganizerDashboard() {
                           <FormItem>
                             <FormLabel>Short Description</FormLabel>
                             <FormControl>
-                              <Input placeholder="Brief description for event cards" {...field} data-testid="input-short-description" />
+                              <Input placeholder="Brief description for event cards" {...field} value={field.value || ""} data-testid="input-short-description" />
                             </FormControl>
                             <FormDescription>
                               This will be shown on event cards and previews

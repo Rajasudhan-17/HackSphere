@@ -73,8 +73,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const eventData = insertEventSchema.parse({
         ...req.body,
         organizerId: userId,
-        resources: req.body.resources || [],
-        tags: req.body.tags || [],
+        resources: Array.isArray(req.body.resources) 
+          ? req.body.resources as { title: string; url: string; type: string }[]
+          : [],
+        tags: Array.isArray(req.body.tags) ? req.body.tags as string[] : [],
       });
 
       const event = await storage.createEvent(eventData);
@@ -105,8 +107,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const updateData = insertEventSchema.partial().parse({
         ...req.body,
-        resources: req.body.resources || undefined,
-        tags: req.body.tags || undefined,
+        resources: Array.isArray(req.body.resources) 
+          ? req.body.resources as { title: string; url: string; type: string }[]
+          : undefined,
+        tags: Array.isArray(req.body.tags) ? req.body.tags as string[] : undefined,
       });
       const updatedEvent = await storage.updateEvent(id, updateData);
       res.json(updatedEvent);
@@ -215,7 +219,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         eventId,
         userId,
         teamName: req.body.teamName || null,
-        teamMembers: req.body.teamMembers || [],
+        teamMembers: Array.isArray(req.body.teamMembers) 
+          ? req.body.teamMembers as { name: string; email: string; role?: string }[]
+          : [],
       });
 
       const registration = await storage.createRegistration(registrationData);
