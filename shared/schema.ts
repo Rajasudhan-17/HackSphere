@@ -152,7 +152,11 @@ export type LeaderboardEntry = typeof leaderboard.$inferSelect;
 export type InsertLeaderboardEntry = typeof leaderboard.$inferInsert;
 
 // Zod schemas
-export const insertEventSchema = createInsertSchema(events).omit({
+export const insertEventSchema = createInsertSchema(events, {
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(), 
+  registrationDeadline: z.coerce.date(),
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
